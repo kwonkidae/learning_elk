@@ -1,0 +1,49 @@
+GET /bigginsight/_search?track_total_hits=true
+{
+  "aggregations": {
+    "downloaded_sum": {
+      "sum": {
+        "field": "downloadTotal"
+      }
+    }
+  },
+  "size": 0
+}
+
+GET /bigginsight/_search
+{
+  "aggregations": {
+    "downloaded_average": {
+      "avg": {
+        "field": "downloadTotal"
+      }
+    }
+  },
+  "size": 0
+}
+
+GET bigginsight/_search
+{
+  "aggregations": {
+    "download_min": {
+      "min": {
+        "field": "downloadTotal"
+      }
+    }
+  },
+  "size": 0
+}
+
+GET bigginsight/_search
+{
+  "aggregations": {
+    "download_max": {
+      "max": {
+        "field": "downloadTotal"
+      }
+    }
+  },
+  "size": 0
+}
+
+

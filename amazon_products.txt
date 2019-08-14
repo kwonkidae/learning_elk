@@ -1,0 +1,138 @@
+GET /amazon_products/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+      "manufacturer.raw": "victory multimedia"
+        }
+      }
+    }
+  }
+}
+
+GET /amazon_products/_search
+{
+  "query": {
+    "match_phrase": {
+      "description": {
+        "query": "real video aquarium",
+        "slop": 1
+      }
+    }
+  }
+}
+
+GET  /amazon_products/_search
+{
+  "query": {
+    "multi_match": {
+      "query": "monitor aquarium",
+      "fields": ["title^3", "description"]
+    }
+  }
+}
+
+GET /amazon_products/_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "price": {
+                  "gte": 10,
+                  "lte": 30
+                }
+              }
+            }
+          ],
+          "should": [
+            {
+              "term": {
+                "manufacturer.raw": {
+                  "value": "valuesoft1111"
+                }
+              }
+            },
+            {
+              "term": {
+                "manufacturer.raw": {
+                  "value": "pinnacle234234"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+
+GET /amazon_products_with_features/_search
+{
+  "query": {
+      "has_child": {
+        
+      "type": "feature",
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "term": {
+                "feature_key": {
+                  "value": "processor_series"
+                }
+              }  
+            },
+            {
+              "term": {
+                "feature_value": {
+                  "value": "Core i7"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+
+GET /amazon_products_with_features/_search
+{
+  "query": {
+    "has_parent": {
+      "parent_type": "product",
+      "query": {
+        "ids": {
+          "values": ["c0001"]
+        }
+      }
+    }
+  }
+}
+
+GET /amazon_products_with_features/_search
+{
+  "query": {
+    "parent_id": {
+      "type": "feature",
+      "id": "c0001"
+    }
+  }
+}
+
+GET /bigginsight/_search?track_total_hits=false
+{
+  "aggregations": {
+    "downloaded_sum": {
+      "sum": {
+        "field": "downloadTotal"
+      }
+    }
+  },
+  "size": 0
+}
