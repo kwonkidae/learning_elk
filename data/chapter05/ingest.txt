@@ -1,0 +1,70 @@
+PUT /_ingest/pipeline/firstpipeline
+{
+  "description": "uppercase the incoming value in the message field",
+  "processors": [
+    {
+      "uppercase": {
+        "field": "message"
+      }
+    }
+  ]
+}
+
+PUT /myindex/_doc/1?pipeline=firstpipeline
+{
+  "message": "elk is awesome"
+}
+
+GET /myindex/_doc/1
+
+
+PUT /_ingest/pipeline/secondpipeline
+{
+  "description": "uppercase the incoming value in the message field",
+  "processors": [
+    {
+      "uppercase": {
+        "field": "message",
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "field": "message",
+        "target_field": "data",
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "field": "label",
+        "value": "testlabel",
+        "override": false
+      }
+    }
+  ]
+}
+
+PUT /myindex/_doc/2?pipeline=secondpipeline
+{
+  "message": "elk is awesome"
+}
+
+GET /_ingest/pipeline/firstpipeline
+
+POST /_ingest/pipeline/_simulate
+{
+  "pipeline": {
+    "processors": [
+      {
+        "join": {
+          "field": "message",
+          "separator": "-"
+        }
+      }
+    ]
+  },
+  "docs": [
+    { "_source": {"message": ["first", "document"]} }
+  ]
+}
