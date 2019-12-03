@@ -1,11 +1,14 @@
 version: '3'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    image: elasticsearch-custom
     environment:
       - discovery.type=single-node
     ports:
       - 9200:9200
+    volumes:
+      - /Users/kidaekwon/study/elk/synonyms.txt:/usr/share/elasticsearch/config/synonyms.txt
+      - /Users/kidaekwon/study/elk/elk_data:/usr/share/elasticsearch/data
   kibana:
     image: docker.elastic.co/kibana/kibana:7.3.0
     ports:
